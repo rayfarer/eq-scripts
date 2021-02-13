@@ -14,7 +14,7 @@ print('')
 
 print('\033[31m' + ' Welcome to Camp Time!')
 print('\033[39m')
-playsound('icefreti_atk.wav')
+playsound('sounds/icefreti_atk.wav')
 
 mobname = input(" Name of mob camping: ")
 print("")
@@ -48,7 +48,7 @@ def do_something(sc):
     current_time = now.strftime("%H:%M:%S")
     print(" Pop! " + mobname + " should be up as of ", current_time)
     # do your stuff
-    playsound('icefreti_atk.wav')
+    playsound('sounds/icefreti_atk.wav')
     s.enter(popTime, 1, do_something, (sc,))
 
 
