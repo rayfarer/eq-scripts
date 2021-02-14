@@ -1,3 +1,4 @@
+#Import modules
 import sys
 import ast
 import colorama
@@ -20,16 +21,19 @@ playsound('sounds/voc_welcome.wav')
 mobName = input(" Name of mob camping: ")
 print('\033[39m')
 
+#Open bestiary text file and read it
 file = open("bestiary.txt", "r")
-
 contents = file.read()
 dictionary = ast.literal_eval(contents)
+file.close()
 
+# Scheduler initialization
 s = sched.scheduler(time.time, time.sleep)
 t = 0
 
-file.close()
+# Define functions
 
+# Fire up the mob timer
 def runMobTimer(mobName, popTime):
     popTime = dictionary.get(mobName)
     popMins = str(popTime / 60)
@@ -44,21 +48,15 @@ def runMobTimer(mobName, popTime):
         time.sleep(1)
     s.run()
 
+# Grab current time
 def printTime():
     now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print("Current Time =", current_time)
+    currentTime = now.strftime("%H:%M:%S")
+    print(" Pop! " + Fore.YELLOW + mobName.capitalize() + Fore.CYAN + " should be up as of " + Fore.GREEN + currentTime)
 
-
-def minuteElapsed():
-    threading.Timer(60.0, printTime).start()  # called every minute
-
-
+# Function that runs at beginning of camp timer
 def do_something(sc, popTime):
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print(" Pop! " + mobName + " should be up as of ", current_time)
-    # do your stuff
+    printTime()
     playsound('sounds/icefreti_atk.wav', block=False)
     s.enter(popTime, 1, do_something, (sc, popTime))
     for remaining in range(popTime, 0, -1):
@@ -67,14 +65,7 @@ def do_something(sc, popTime):
         sys.stdout.flush()
         time.sleep(1)
 
-if mobName in dictionary.keys():
-    print(" Ah, yes... " + mobName)
-    popTime = dictionary.get(mobName)
-    print()
-    playsound('sounds/page_turn01.wav')
-    runMobTimer(mobName, popTime)
-
-else:
+def addMob():
     question = (" No such being in the bestiary. Would you like to add it? ")
     answer = input(question + "(y/n): ").lower().strip()
     print("")
@@ -90,7 +81,7 @@ else:
         print()
         newPopTimeInt = int(newPopTime)
         dictionary[newMob] = int(newPopTimeInt)
-        print(" I shall make a note of " + newMob+ ", adventurer. Happy camping!")
+        print(" I shall make a note of " + Fore.YELLOW + newMob + Fore.WHITE + ", adventurer. Happy camping!")
         print()
         playsound('sounds/page_turn01.wav')
         import json
@@ -104,3 +95,17 @@ else:
         print()
         playsound('sounds/voc_yruhere.wav')
         sys.exit()
+
+# End of function defs
+
+# Check if input is in bestiary already
+if mobName in dictionary.keys():
+    print(" Ah, yes... " + mobName)
+    popTime = dictionary.get(mobName)
+    print()
+    playsound('sounds/page_turn01.wav')
+    runMobTimer(mobName, popTime)
+
+# If input is not in bestiary, ask if user wants to add it.
+else:
+    addMob()
