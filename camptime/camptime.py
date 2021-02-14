@@ -14,7 +14,7 @@ colorama.init()
 print('')
 print(Fore.RED + ' Welcome to CampTime!')
 print('\033[39m')
-playsound('sounds/icefreti_atk.wav')
+playsound('sounds/voc_welcome.wav')
 
 # Prompt user for mob they are camping
 mobName = input(" Name of mob camping: ")
@@ -36,7 +36,7 @@ def runMobTimer(mobName, popTime):
     playsound('sounds/clock.wav', block=False)
     print(" Respawn time for " + mobName + " is " + Fore.GREEN + popMins + Fore.WHITE + " minutes. Happy camping!")
     print()
-    s.enter(popTime, 1, do_something, (s,))
+    s.enter(popTime, 1, do_something, (s, popTime))
     for remaining in range(popTime, 0, -1):
         sys.stdout.write("\r")
         sys.stdout.write(Fore.CYAN + " {:2d} seconds remaining.".format(remaining))
@@ -54,13 +54,13 @@ def minuteElapsed():
     threading.Timer(60.0, printTime).start()  # called every minute
 
 
-def do_something(sc):
+def do_something(sc, popTime):
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print(" Pop! " + mobName + " should be up as of ", current_time)
     # do your stuff
     playsound('sounds/icefreti_atk.wav', block=False)
-    s.enter(popTime, 1, do_something, (sc,))
+    s.enter(popTime, 1, do_something, (sc, popTime))
     for remaining in range(popTime, 0, -1):
         sys.stdout.write("\r")
         sys.stdout.write(Fore.CYAN + " {:2d} seconds remaining.".format(remaining))
@@ -85,10 +85,13 @@ else:
         print()
     if answer[0] == "y":
         newMob = input(" What is the exact name of the mob? ")
+        print()
         newPopTime = input(" How many seconds does it take for this mob to spawn? ")
+        print()
         newPopTimeInt = int(newPopTime)
         dictionary[newMob] = int(newPopTimeInt)
-        print(" I shall make a note of " + newMob+ ", adventurer. Happy camping.")
+        print(" I shall make a note of " + newMob+ ", adventurer. Happy camping!")
+        print()
         playsound('sounds/page_turn01.wav')
         import json
         with open('bestiary.txt', 'w') as file:
@@ -99,5 +102,5 @@ else:
     else:
         print(" Very well, adventurer. Now begone!")
         print()
-        playsound('sounds/voc_yruhere.wav', block=False)
+        playsound('sounds/voc_yruhere.wav')
         sys.exit()
