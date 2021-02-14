@@ -17,7 +17,7 @@ Alternatively, you can double click the file if you have a Python environment in
 
 You can either add mobs and their respawn times as you go, or edit the bestiary.txt file directly. Make sure you use an int for the respawn time, which is measured in seconds. Ex:
 
-    {"an ice giant": 6, "Lord Begurgle": 5}
+    {"an ice giant": 480, "Lord Begurgle": 1680}
 
 
 
