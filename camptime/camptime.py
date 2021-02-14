@@ -7,30 +7,33 @@ from datetime import datetime
 from playsound import playsound
 from colorama import Fore, Back, Style
 
-
 # Fun title text
 colorama.init()
 print('')
 
-print('\033[31m' + ' Welcome to Camp Time!')
+print(Fore.RED + ' Welcome to CampTime!')
 print('\033[39m')
 playsound('sounds/icefreti_atk.wav')
-
-mobname = input(" Name of mob camping: ")
-print("")
 
 # The bestiary has mob types and their respawn times
 bestiary = {
     "an ice giant": 480
 }
 
-popTime = bestiary.get('an ice giant')
-popMins = str(popTime / 60)
-print(" Respawn time for " + mobname + " is " +
-      popMins + " minutes. Happy camping!")
+mobname = input(" Name of mob camping: ")
+print('\033[39m')
 
-s = sched.scheduler(time.time, time.sleep)
-t = 0
+if mobname in bestiary:
+    popTime = bestiary.get(mobname)
+    popMins = str(popTime / 60)
+    print(" Respawn time for " + mobname + " is " + Fore.GREEN + popMins + Fore.WHITE + " minutes. Happy camping!")
+    print("")
+    s = sched.scheduler(time.time, time.sleep)
+    t = 0
+
+else:
+    print("No such mob.")
+    sys.exit()
 
 
 def printTime():
@@ -55,7 +58,7 @@ def do_something(sc):
 s.enter(popTime, 1, do_something, (s,))
 for remaining in range(popTime, 0, -1):
     sys.stdout.write("\r")
-    sys.stdout.write("{:2d} seconds remaining.".format(remaining))
+    sys.stdout.write(Fore.CYAN + " {:2d} seconds remaining.".format(remaining))
     sys.stdout.flush()
     time.sleep(1)
 s.run()
