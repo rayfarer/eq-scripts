@@ -9,7 +9,7 @@ You will need Python 3.0 and a couple of modules installed in order to use this 
 * [colorama](https://pypi.org/project/colorama/)
 * [playsound](https://pypi.org/project/playsound/)
 
-To run, simply fire up your terminal and type 
+To run, simply fire up your terminal/command line and type 
 
     python camptime.py
 
