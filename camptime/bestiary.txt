@@ -1,1 +1,1 @@
-{"an ice giant": 6, "Lord Begurgle": 5, "af": 5, "dog": 5, "test": 5}
+{"an ice giant": 480}
