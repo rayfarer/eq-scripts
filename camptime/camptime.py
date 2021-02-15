@@ -40,14 +40,14 @@ def runMobTimer(mobName, popTime):
     popTime = dictionary.get(mobName)
     popMins = str(popTime / 60)
     playsound('sounds/clock.wav', block=False)
-    print(" Respawn time for " + mobName + " is " + Fore.GREEN +
+    print(" Respawn time for " + Fore.RED + mobName + Fore.WHITE + " is " + Fore.GREEN +
           popMins + Fore.WHITE + " minutes. Happy camping!")
     print()
     s.enter(popTime, 1, do_something, (s, popTime))
     for remaining in range(popTime, 0, -1):
         sys.stdout.write("\r")
         sys.stdout.write(
-            Fore.CYAN + " {:2d} seconds remaining.".format(remaining))
+            Fore.YELLOW + " {:2d}".format(remaining) + Fore.WHITE + " seconds remaining")
         sys.stdout.flush()
         time.sleep(1)
     s.run()
@@ -58,7 +58,7 @@ def runMobTimer(mobName, popTime):
 def printTime():
     now = datetime.now()
     currentTime = now.strftime("%H:%M:%S")
-    print(" Pop! " + Fore.YELLOW + mobName + Fore.CYAN +
+    print(" Pop! " + Fore.RED + mobName + Fore.WHITE +
           " should be up as of " + Fore.GREEN + currentTime)
 
 # Function that runs at beginning of camp timer
@@ -71,7 +71,7 @@ def do_something(sc, popTime):
     for remaining in range(popTime, 0, -1):
         sys.stdout.write("\r")
         sys.stdout.write(
-            Fore.CYAN + " {:2d} seconds remaining.".format(remaining))
+            Fore.YELLOW + " {:2d}".format(remaining) + Fore.WHITE + " seconds remaining")
         sys.stdout.flush()
         time.sleep(1)
 
@@ -93,7 +93,7 @@ def addMob():
         print()
         newPopTimeInt = int(newPopTime)
         dictionary[newMob] = int(newPopTimeInt)
-        print(" I shall make a note of " + Fore.YELLOW +
+        print(" I shall make a note of " + Fore.RED +
               newMob + Fore.WHITE + ", adventurer. Happy camping!")
         print()
         playsound('sounds/page_turn01.wav')
