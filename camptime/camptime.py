@@ -4,11 +4,11 @@ import ast
 import colorama
 import sched
 import time
-import threading
-import json
+import keyboard
 from datetime import datetime
 from playsound import playsound
 from colorama import Fore, Back, Style
+
 
 # Fun title text and welcome sound
 colorama.init()
@@ -17,63 +17,68 @@ print(Fore.RED + ' Welcome to CampTime!')
 print('\033[39m')
 playsound('sounds/voc_welcome.wav')
 
-# Prompt user for mob they are camping
-mobName = input(" Name of mob camping: ")
-print('\033[39m')
+# Scheduler initialization
+s = sched.scheduler(time.time, time.sleep)
+t = 0
 
-# Open bestiary text file and read it
+ # Open bestiary text file and read it
 file = open("bestiary.txt", "r")
 contents = file.read()
 dictionary = ast.literal_eval(contents)
 file.close()
 
-# Scheduler initialization
-s = sched.scheduler(time.time, time.sleep)
-t = 0
+# Prompt user for mob they are camping
+def monsterInput():
+    mobName = input(" Name of mob camping: ")
+    print('\033[39m')
+
+    # Check if input is in bestiary already
+    if mobName in dictionary.keys():
+        print(" Ah, yes... " + Fore.MAGENTA + mobName + Fore.WHITE)
+        popTime = dictionary.get(mobName)
+        print()
+        playsound('sounds/page_turn01.wav')
+        runMobTimer(mobName, popTime)
+
+    # If input is not in bestiary, ask if user wants to add it.
+    else:
+        addMob()
 
 # Define functions
 
 # Fire up the mob timer
-
-
 def runMobTimer(mobName, popTime):
-    popTime = dictionary.get(mobName)
     popMins = str(popTime / 60)
     playsound('sounds/clock.wav', block=False)
     print(" Respawn time for " + Fore.MAGENTA + mobName + Fore.WHITE + " is " + Fore.GREEN +
           popMins + Fore.WHITE + " minutes. Happy camping!")
     print()
-    s.enter(popTime, 1, do_something, (s, popTime))
+    s.enter(popTime, 1, do_something, (s, popTime, mobName))
+    countdown(popTime)
+    s.run()
+
+# Time Loop
+def countdown(popTime):        
     for remaining in range(popTime, 0, -1):
         sys.stdout.write("\r")
         sys.stdout.write(
-            Fore.YELLOW + " {:2d}".format(remaining) + Fore.WHITE + " seconds remaining")
+            Fore.YELLOW + " {:2d} ".format(remaining) + Fore.WHITE + "seconds remaining...")
         sys.stdout.flush()
         time.sleep(1)
-    s.run()
 
 # Grab current time
-
-
-def printTime():
+def printTime(mobName):
     now = datetime.now()
     currentTime = now.strftime("%H:%M:%S")
     print(" Pop! " + Fore.MAGENTA + mobName + Fore.WHITE +
           " should be up as of " + Fore.GREEN + currentTime)
 
 # Function that runs at beginning of camp timer
-
-
-def do_something(sc, popTime):
-    printTime()
+def do_something(sc, popTime, mobName):
+    printTime(mobName)
     playsound('sounds/icefreti_atk.wav', block=False)
-    s.enter(popTime, 1, do_something, (sc, popTime))
-    for remaining in range(popTime, 0, -1):
-        sys.stdout.write("\r")
-        sys.stdout.write(
-            Fore.YELLOW + " {:2d}".format(remaining) + Fore.WHITE + " seconds remaining")
-        sys.stdout.flush()
-        time.sleep(1)
+    s.enter(popTime, 1, do_something, (sc, popTime, mobName))
+    countdown(popTime)
 
 
 def addMob():
@@ -112,15 +117,5 @@ def addMob():
 
 # End of function defs
 
-
-# Check if input is in bestiary already
-if mobName in dictionary.keys():
-    print(" Ah, yes... " + Fore.MAGENTA + mobName + Fore.WHITE)
-    popTime = dictionary.get(mobName)
-    print()
-    playsound('sounds/page_turn01.wav')
-    runMobTimer(mobName, popTime)
-
-# If input is not in bestiary, ask if user wants to add it.
-else:
-    addMob()
+# Kick things off
+monsterInput()
