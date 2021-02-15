@@ -1,1 +1,1 @@
-{"an ice giant": 480, "a dog": 3}
+{"an ice giant": 480}
