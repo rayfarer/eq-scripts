@@ -1,19 +1,16 @@
 # Import modules
 import sys
 import ast
-import colorama
 import sched
 import time
 from datetime import datetime
 from playsound import playsound
-from colorama import Fore, Back, Style
 
 
 # Fun title text and welcome sound
-colorama.init()
 print('')
-print(Fore.RED + ' Welcome to CampTime!')
-print('\033[39m')
+print(' Welcome to CampTime!')
+print()
 playsound('sounds/voc_welcome.wav')
 
 # Scheduler initialization
@@ -29,11 +26,11 @@ file.close()
 # Prompt user for mob they are camping
 def monsterInput():
     mobName = input(" Name of mob camping: ")
-    print('\033[39m')
+    print()
 
     # Check if input is in bestiary already
     if mobName in dictionary.keys():
-        print(" Ah, yes... " + Fore.MAGENTA + mobName + Fore.WHITE)
+        print(" Ah, yes... " + mobName)
         popTime = dictionary.get(mobName)
         print()
         playsound('sounds/page_turn01.wav')
@@ -61,22 +58,22 @@ def modePrompt(mobName, popTime):
 # Fire up the mob timer
 
 def runMobTimer(mobName, popTime, mode):
-    popMins = str(popTime / 60)
+    popMins = str(round(popTime/60, 2))
     if mode == "y":
         modeText = " Automatic"
     elif mode == "n":
         modeText= " Manual"
     playsound('sounds/clock.wav', block=False)
     print()
-    print(Fore.CYAN + modeText + Fore.WHITE + " respawn timer for " + Fore.MAGENTA + mobName + Fore.WHITE + " is set to " + Fore.GREEN +
-        popMins + Fore.WHITE + " minutes. Happy camping!")
+    print(modeText + " respawn timer for " + mobName + " is set to " +
+        popMins + " minutes. Happy camping!")
     print()
 
     s.enter(popTime, 1, do_something, (s, popTime, mobName, mode))
     for remaining in range(popTime, -1, -1):
         sys.stdout.write("\r")
         sys.stdout.write(
-            Fore.YELLOW + " {:2d} ".format(remaining) + Fore.WHITE + "seconds remaining...")
+            "{:2d} ".format(remaining) + "seconds remaining...")
         sys.stdout.flush()
         time.sleep(1)
     s.run()
@@ -86,7 +83,7 @@ def countdown(popTime):
     for remaining in range(popTime, -1, -1):
         sys.stdout.write("\r")
         sys.stdout.write(
-            Fore.YELLOW + " {:2d} ".format(remaining) + Fore.WHITE + "seconds remaining...")
+            "{:2d} ".format(remaining) + "seconds remaining...")
         sys.stdout.flush()
         time.sleep(1)
 
@@ -98,12 +95,11 @@ def getTime():
 
 def printPop(mobName):
     currentTime = getTime()
-    print(" Pop! " + Fore.MAGENTA + mobName + Fore.WHITE +
-          " should be up as of " + Fore.GREEN + currentTime)
+    print(" Pop! " + mobName + " should be up as of " + currentTime)
 
 def printTimerStarted():
     currentTime = getTime()
-    print(Fore.CYAN +" Manual" + Fore.WHITE + " respawn timer started at " + Fore.GREEN + currentTime)
+    print(" Manual" + " respawn timer started at " + currentTime)
 
 # Function that runs at beginning of camp timer
 def do_something(sc, popTime, mobName, mode):
@@ -124,7 +120,7 @@ def do_something(sc, popTime, mobName, mode):
 
 
 def addMob(newMob):
-    question = (" I could not find " + Fore.MAGENTA + newMob + Fore.WHITE + " in the bestiary. Would you like to add it? ")
+    question = (" I could not find " + newMob + " in the bestiary. Would you like to add it? ")
     answer = input(question + "(y/n): ").lower().strip()
     print("")
     while not(answer == "y" or answer == "yes" or
@@ -136,12 +132,12 @@ def addMob(newMob):
         newMob = input(" What is the exact name of the mob? ")
         print()
         newPopTime = input(
-            " How many seconds does it take for " + Fore.MAGENTA + newMob + Fore.WHITE + " to spawn? ")
+            " How many seconds does it take for " + newMob + " to spawn? ")
         print()
         newPopTimeInt = int(newPopTime)
         dictionary[newMob] = int(newPopTimeInt)
-        print(" I shall make a note of " + Fore.MAGENTA +
-              newMob + Fore.WHITE + ", adventurer.")
+        print(" I shall make a note of " +
+              newMob + ", adventurer.")
         print()
         playsound('sounds/page_turn01.wav')
         import json
