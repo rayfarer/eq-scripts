@@ -40,7 +40,7 @@ def runMobTimer(mobName, popTime):
     popTime = dictionary.get(mobName)
     popMins = str(popTime / 60)
     playsound('sounds/clock.wav', block=False)
-    print(" Respawn time for " + Fore.RED + mobName + Fore.WHITE + " is " + Fore.GREEN +
+    print(" Respawn time for " + Fore.MAGENTA + mobName + Fore.WHITE + " is " + Fore.GREEN +
           popMins + Fore.WHITE + " minutes. Happy camping!")
     print()
     s.enter(popTime, 1, do_something, (s, popTime))
@@ -58,7 +58,7 @@ def runMobTimer(mobName, popTime):
 def printTime():
     now = datetime.now()
     currentTime = now.strftime("%H:%M:%S")
-    print(" Pop! " + Fore.RED + mobName + Fore.WHITE +
+    print(" Pop! " + Fore.MAGENTA + mobName + Fore.WHITE +
           " should be up as of " + Fore.GREEN + currentTime)
 
 # Function that runs at beginning of camp timer
@@ -93,7 +93,7 @@ def addMob():
         print()
         newPopTimeInt = int(newPopTime)
         dictionary[newMob] = int(newPopTimeInt)
-        print(" I shall make a note of " + Fore.RED +
+        print(" I shall make a note of " + Fore.MAGENTA +
               newMob + Fore.WHITE + ", adventurer. Happy camping!")
         print()
         playsound('sounds/page_turn01.wav')
@@ -115,7 +115,7 @@ def addMob():
 
 # Check if input is in bestiary already
 if mobName in dictionary.keys():
-    print(" Ah, yes... " + mobName)
+    print(" Ah, yes... " + Fore.MAGENTA + mobName + Fore.WHITE)
     popTime = dictionary.get(mobName)
     print()
     playsound('sounds/page_turn01.wav')
