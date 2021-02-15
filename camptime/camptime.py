@@ -4,7 +4,6 @@ import ast
 import colorama
 import sched
 import time
-import keyboard
 from datetime import datetime
 from playsound import playsound
 from colorama import Fore, Back, Style
@@ -72,8 +71,14 @@ def runMobTimer(mobName, popTime, mode):
     print(Fore.CYAN + modeText + Fore.WHITE + " respawn timer for " + Fore.MAGENTA + mobName + Fore.WHITE + " is set to " + Fore.GREEN +
         popMins + Fore.WHITE + " minutes. Happy camping!")
     print()
+
     s.enter(popTime, 1, do_something, (s, popTime, mobName, mode))
-    countdown(popTime)
+    for remaining in range(popTime, -1, -1):
+        sys.stdout.write("\r")
+        sys.stdout.write(
+            Fore.YELLOW + " {:2d} ".format(remaining) + Fore.WHITE + "seconds remaining...")
+        sys.stdout.flush()
+        time.sleep(1)
     s.run()
 
 # Time Loop
@@ -106,15 +111,15 @@ def do_something(sc, popTime, mobName, mode):
     playsound('sounds/icefreti_atk.wav')
     if mode == "y":
         playsound('sounds/clock.wav', block=False)
-        countdown(popTime)
         s.enter(popTime, 1, do_something, (sc, popTime, mobName, "y"))
+        countdown(popTime)
     elif mode== "n":
         print()
         input(" Press enter to reset camp timer.")
         printTimerStarted()
         playsound('sounds/clock.wav', block=False)
-        countdown(popTime)
         s.enter(popTime, 1, do_something, (sc, popTime, mobName, "n"))
+        countdown(popTime)
         
 
 
