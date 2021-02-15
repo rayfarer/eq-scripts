@@ -1,4 +1,4 @@
-# Welcome
+# EverQuest Scripts
 
 A collection of auxilliary scripts I use while playing EverQuest.
 

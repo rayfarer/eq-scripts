@@ -13,7 +13,7 @@ To run, simply fire up your terminal/command line and type
 
     python camptime.py
 
-Alternatively, you can double click the file if you have a Python environment installed. The instructions are self-explanatory one you have launched the program.
+Alternatively, you can double click the file if you have a Python environment installed. The instructions are self-explanatory once you have launched the program.
 
 You can either add mobs and their respawn times as you go, or edit the bestiary.txt file directly. Make sure you use an int for the respawn time, which is measured in seconds. Ex:
 
