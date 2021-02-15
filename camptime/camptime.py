@@ -38,28 +38,47 @@ def monsterInput():
         popTime = dictionary.get(mobName)
         print()
         playsound('sounds/page_turn01.wav')
-        runMobTimer(mobName, popTime)
+        modePrompt(mobName, popTime)
 
     # If input is not in bestiary, ask if user wants to add it.
     else:
-        addMob()
+        addMob(mobName)
 
 # Define functions
 
+def modePrompt(mobName, popTime):
+    prompt = (" Do you want to run the spawn timer automatically? ")
+    mode = input(prompt + "(y/n): ").lower().strip()
+    while not(mode == "y" or mode == "yes" or
+                  mode == "n" or mode == "no"):
+            print("Input yes or no")            
+            mode = input(prompt + "(y/n):").lower().strip()
+            print()
+    if mode == "n" or "no":
+        runMobTimer(mobName, popTime, mode)
+    elif mode =="y" or "yes":
+        runMobTimer(mobName, popTime, mode)
+
 # Fire up the mob timer
-def runMobTimer(mobName, popTime):
+
+def runMobTimer(mobName, popTime, mode):
     popMins = str(popTime / 60)
+    if mode == "y":
+        modeText = " Automatic"
+    elif mode == "n":
+        modeText= " Manual"
     playsound('sounds/clock.wav', block=False)
-    print(" Respawn time for " + Fore.MAGENTA + mobName + Fore.WHITE + " is " + Fore.GREEN +
-          popMins + Fore.WHITE + " minutes. Happy camping!")
     print()
-    s.enter(popTime, 1, do_something, (s, popTime, mobName))
+    print(Fore.CYAN + modeText + Fore.WHITE + " respawn timer for " + Fore.MAGENTA + mobName + Fore.WHITE + " is set to " + Fore.GREEN +
+        popMins + Fore.WHITE + " minutes. Happy camping!")
+    print()
+    s.enter(popTime, 1, do_something, (s, popTime, mobName, mode))
     countdown(popTime)
     s.run()
 
 # Time Loop
 def countdown(popTime):        
-    for remaining in range(popTime, 0, -1):
+    for remaining in range(popTime, -1, -1):
         sys.stdout.write("\r")
         sys.stdout.write(
             Fore.YELLOW + " {:2d} ".format(remaining) + Fore.WHITE + "seconds remaining...")
@@ -67,22 +86,40 @@ def countdown(popTime):
         time.sleep(1)
 
 # Grab current time
-def printTime(mobName):
+def getTime():
     now = datetime.now()
     currentTime = now.strftime("%H:%M:%S")
+    return currentTime
+
+def printPop(mobName):
+    currentTime = getTime()
     print(" Pop! " + Fore.MAGENTA + mobName + Fore.WHITE +
           " should be up as of " + Fore.GREEN + currentTime)
 
+def printTimerStarted():
+    currentTime = getTime()
+    print(Fore.CYAN +" Manual" + Fore.WHITE + " respawn timer started at " + Fore.GREEN + currentTime)
+
 # Function that runs at beginning of camp timer
-def do_something(sc, popTime, mobName):
-    printTime(mobName)
-    playsound('sounds/icefreti_atk.wav', block=False)
-    s.enter(popTime, 1, do_something, (sc, popTime, mobName))
-    countdown(popTime)
+def do_something(sc, popTime, mobName, mode):
+    printPop(mobName)
+    playsound('sounds/icefreti_atk.wav')
+    if mode == "y":
+        playsound('sounds/clock.wav', block=False)
+        countdown(popTime)
+        s.enter(popTime, 1, do_something, (sc, popTime, mobName, "y"))
+    elif mode== "n":
+        print()
+        input(" Press enter to reset camp timer.")
+        printTimerStarted()
+        playsound('sounds/clock.wav', block=False)
+        countdown(popTime)
+        s.enter(popTime, 1, do_something, (sc, popTime, mobName, "n"))
+        
 
 
-def addMob():
-    question = (" No such being in the bestiary. Would you like to add it? ")
+def addMob(newMob):
+    question = (" I could not find " + Fore.MAGENTA + newMob + Fore.WHITE + " in the bestiary. Would you like to add it? ")
     answer = input(question + "(y/n): ").lower().strip()
     print("")
     while not(answer == "y" or answer == "yes" or
@@ -94,12 +131,12 @@ def addMob():
         newMob = input(" What is the exact name of the mob? ")
         print()
         newPopTime = input(
-            " How many seconds does it take for this mob to spawn? ")
+            " How many seconds does it take for " + Fore.MAGENTA + newMob + Fore.WHITE + " to spawn? ")
         print()
         newPopTimeInt = int(newPopTime)
         dictionary[newMob] = int(newPopTimeInt)
         print(" I shall make a note of " + Fore.MAGENTA +
-              newMob + Fore.WHITE + ", adventurer. Happy camping!")
+              newMob + Fore.WHITE + ", adventurer.")
         print()
         playsound('sounds/page_turn01.wav')
         import json
@@ -107,8 +144,7 @@ def addMob():
             # use `json.loads` to do the reverse
             file.write(json.dumps(dictionary))
             file.close()
-        runMobTimer(newMob, newPopTimeInt)
-
+        modePrompt(newMob, newPopTimeInt)
     else:
         print(" Very well, adventurer. Now begone!")
         print()
