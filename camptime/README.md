@@ -2,7 +2,8 @@
 
 A script to help notify you when a mob you are camping is expected to pop.
 
-https://www.youtube.com/watch?v=G79VGqp6WEI
+![youtube-video-gif](https://user-images.githubusercontent.com/26852603/226750972-f71ebaff-8c0d-4b0f-811c-6588eef00f2c.gif)
+
 
 ## Installation
 
