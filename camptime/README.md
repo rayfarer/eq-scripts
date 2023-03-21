@@ -2,12 +2,12 @@
 
 A script to help notify you when a mob you are camping is expected to pop.
 
-![youtube-video-gif](https://user-images.githubusercontent.com/26852603/226750972-f71ebaff-8c0d-4b0f-811c-6588eef00f2c.gif)
-
+![youtube-video-gif (1)](https://user-images.githubusercontent.com/26852603/226751298-19b3259f-d66e-4ff0-83cc-8a6eb4b432b6.gif)
 
 ## Installation
 
 You will need at least Python 3.0 and the playsound module installed in order to use this simple script.
+
 
 * [playsound](https://pypi.org/project/playsound/)
 
