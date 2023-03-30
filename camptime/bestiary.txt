@@ -1,1 +1,1 @@
-{"an ice giant": 360}
+{"an ice giant": 360, "an enforcer": 780 }
