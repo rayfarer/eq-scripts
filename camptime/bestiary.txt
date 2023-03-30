@@ -1,1 +1,2 @@
-{"an ice giant": 360, "a temple guard": 1080, "a Soriz Skeleton": 1200, "me shard": 1200, "a Drolvarg warlord": 1590}
+{"an ice giant": 360, "a temple guard": 1080, "a Soriz Skeleton": 1200, "me shard": 1200, "a Drolvarg warlord": 1590, "an enforcer": 780}
+
